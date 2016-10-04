@@ -35,7 +35,7 @@ fx.layoutAttributes = {
     dragmode: {
         valType: 'enumerated',
         role: 'info',
-        values: ['zoom', 'pan', 'select', 'lasso', 'orbit', 'turntable'],
+        values: ['zoom', 'pan', 'pan-x', 'pan-y', 'select', 'lasso', 'orbit', 'turntable'],
         dflt: 'zoom',
         description: [
             'Determines the mode of drag interactions.',

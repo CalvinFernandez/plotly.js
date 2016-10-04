@@ -807,4 +807,82 @@ describe('Test click interactions:', function() {
             mouseEvent('mouseup', end, end);
         });
     });
+
+    describe('pan-x interactions', function() {
+        beforeEach(function(done) {
+            mockCopy.layout.dragmode = 'pan-x';
+
+            Plotly.plot(gd, mockCopy.data, mockCopy.layout).then(done);
+        });
+
+        it('on main dragbox should update the axis ranges', function(done) {
+            expect(gd.layout.xaxis.range).toBeCloseToArray(autoRangeX);
+            expect(gd.layout.yaxis.range).toBeCloseToArray(autoRangeY);
+
+            drag(93, 93, 393, 293).then(function() {
+                expect(gd.layout.xaxis.range).toBeCloseToArray([-5.19567089, -0.02757284]);
+                expect(gd.layout.yaxis.range).toBeCloseToArray(autoRangeY);
+
+                return drag(93, 93, 393, 293);
+            }).then(function() {
+                expect(gd.layout.xaxis.range).toBeCloseToArray([-7.37937429, -2.21127624]);
+                expect(gd.layout.yaxis.range).toBeCloseToArray(autoRangeY);
+
+                done();
+            });
+        });
+
+        it('should move the plot when panning', function() {
+            var start = 100,
+                end = 300,
+                plot = gd._fullLayout._plots.xy.plot;
+
+            mouseEvent('mousemove', start, start);
+            mouseEvent('mousedown', start, start);
+            mouseEvent('mousemove', end, end);
+
+            expect(plot.attr('transform')).toBe('translate(250, 80) scale(1, 1)');
+
+            mouseEvent('mouseup', end, end);
+        });
+    });
+
+    describe('pan-y interactions', function() {
+        beforeEach(function(done) {
+            mockCopy.layout.dragmode = 'pan-y';
+
+            Plotly.plot(gd, mockCopy.data, mockCopy.layout).then(done);
+        });
+
+        it('on main dragbox should update the axis ranges', function(done) {
+            expect(gd.layout.xaxis.range).toBeCloseToArray(autoRangeX);
+            expect(gd.layout.yaxis.range).toBeCloseToArray(autoRangeY);
+
+            drag(93, 93, 393, 293).then(function() {
+                expect(gd.layout.xaxis.range).toBeCloseToArray(autoRangeX);
+                expect(gd.layout.yaxis.range).toBeCloseToArray([0.595918934, 2.976310280]);
+
+                return drag(93, 93, 393, 293);
+            }).then(function() {
+                expect(gd.layout.xaxis.range).toBeCloseToArray(autoRangeX);
+                expect(gd.layout.yaxis.range).toBeCloseToArray([2.182846498, 4.563237844]);
+
+                done();
+            });
+        });
+
+        it('should move the plot when panning', function() {
+            var start = 100,
+                end = 300,
+                plot = gd._fullLayout._plots.xy.plot;
+
+            mouseEvent('mousemove', start, start);
+            mouseEvent('mousedown', start, start);
+            mouseEvent('mousemove', end, end);
+
+            expect(plot.attr('transform')).toBe('translate(50, 280) scale(1, 1)');
+
+            mouseEvent('mouseup', end, end);
+        });
+    });
 });

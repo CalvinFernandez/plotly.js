@@ -137,6 +137,20 @@ module.exports = function dragBox(gd, plotinfo, x, y, w, h, ns, ew) {
                 dragOptions.doneFn = dragDone;
                 clearSelect();
             }
+            else if(dragModeNow === 'pan-x') {
+                dragOptions.moveFn = function(dx, dy) {
+                    plotDrag(dx, dy, 'x');
+                };
+                dragOptions.doneFn = dragDone;
+                clearSelect();
+            }
+            else if(dragModeNow === 'pan-y') {
+                dragOptions.moveFn = function(dx, dy) {
+                    plotDrag(dx, dy, 'y');
+                };
+                dragOptions.doneFn = dragDone;
+                clearSelect();
+            }
             else if(isSelectOrLasso(dragModeNow)) {
                 prepSelect(e, startX, startY, dragOptions, dragModeNow);
             }
@@ -466,13 +480,22 @@ module.exports = function dragBox(gd, plotinfo, x, y, w, h, ns, ew) {
     }
 
     // plotDrag: move the plot in response to a drag
-    function plotDrag(dx, dy) {
+    // optionally pass {"x" | "y"} axis to pin drag to  dimension
+    function plotDrag(dx, dy, axis) {
         // If a transition is in progress, then disable any behavior:
         if(gd._transitioningWithDuration) {
             return;
         }
 
         recomputeAxisLists();
+
+        if(axis === 'x') {
+            xActive = 'ew';
+            yActive = '';
+        } else if(axis === 'y') {
+            xActive = '';
+            yActive = 'ns';
+        }
 
         function dragAxList(axList, pix) {
             for(var i = 0; i < axList.length; i++) {
