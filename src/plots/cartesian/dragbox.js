@@ -387,7 +387,10 @@ module.exports = function dragBox(gd, plotinfo, x, y, w, h, ns, ew) {
         // deactivate mousewheel scrolling on embedded graphs
         // devs can override this with layout._enablescrollzoom,
         // but _ ensures this setting won't leave their page
-        if(!gd._context.scrollZoom && !fullLayout._enablescrollzoom) {
+        if(!gd._context.scrollZoom &&
+           !gd._context.scrollZoomX &&
+           !gd._context.scrollZoomY &&
+           !fullLayout._enablescrollzoom) {
             return;
         }
 
@@ -433,12 +436,12 @@ module.exports = function dragBox(gd, plotinfo, x, y, w, h, ns, ew) {
             ax.range = [v0 + (axRange[0] - v0) * zoom, v0 + (axRange[1] - v0) * zoom];
         }
 
-        if(ew) {
+        if(ew && !gd._context.scrollZoomY) {
             for(i = 0; i < xa.length; i++) zoomWheelOneAxis(xa[i], xfrac, zoom);
             scrollViewBox[2] *= zoom;
             scrollViewBox[0] = vbx0 - scrollViewBox[2] * xfrac;
         }
-        if(ns) {
+        if(ns && !gd._context.scrollZoomX) {
             for(i = 0; i < ya.length; i++) zoomWheelOneAxis(ya[i], yfrac, zoom);
             scrollViewBox[3] *= zoom;
             scrollViewBox[1] = vby0 - scrollViewBox[3] * (1 - yfrac);

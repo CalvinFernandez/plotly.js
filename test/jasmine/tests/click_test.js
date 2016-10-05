@@ -740,13 +740,11 @@ describe('Test click interactions:', function() {
     });
 
     describe('scroll zoom interactions', function() {
-
         beforeEach(function(done) {
             Plotly.plot(gd, mockCopy.data, mockCopy.layout, { scrollZoom: true }).then(done);
         });
 
         it('zooms in on scroll up', function() {
-
             var plot = gd._fullLayout._plots.xy.plot;
 
             mouseEvent('mousemove', 393, 243);
@@ -765,6 +763,61 @@ describe('Test click interactions:', function() {
 
             expect([translate.x, translate.y]).toBeCloseToArray([61.070, 97.712]);
             expect([scale.x, scale.y]).toBeCloseToArray([1.221, 1.221]);
+        });
+    });
+
+    describe('scroll zoom x interactions', function() {
+        beforeEach(function(done) {
+            Plotly.plot(gd, mockCopy.data, mockCopy.layout, { scrollZoomX: true }).then(done);
+        });
+
+        it('zooms x axis in on scroll up', function() {
+            var plot = gd._fullLayout._plots.xy.plot;
+
+            mouseEvent('mousemove', 393, 243);
+            mouseEvent('scroll', 393, 243, { deltaX: 0, deltaY: -1000 });
+
+            var transform = plot.attr('transform');
+
+            var mockEl = {
+                attr: function() {
+                    return transform;
+                }
+            };
+
+            var translate = Lib.getTranslate(mockEl),
+                scale = Lib.getScale(mockEl);
+
+
+            expect([translate.x, translate.y]).toBeCloseToArray([61.070, 80]);
+            expect([scale.x, scale.y]).toBeCloseToArray([1.221, 1]);
+        });
+    });
+
+    describe('scroll zoom y interactions', function() {
+        beforeEach(function(done) {
+            Plotly.plot(gd, mockCopy.data, mockCopy.layout, { scrollZoomY: true }).then(done);
+        });
+
+        it('zooms y in on scroll up', function() {
+            var plot = gd._fullLayout._plots.xy.plot;
+
+            mouseEvent('mousemove', 393, 243);
+            mouseEvent('scroll', 393, 243, { deltaX: 0, deltaY: -1000 });
+
+            var transform = plot.attr('transform');
+
+            var mockEl = {
+                attr: function() {
+                    return transform;
+                }
+            };
+
+            var translate = Lib.getTranslate(mockEl),
+                scale = Lib.getScale(mockEl);
+
+            expect([translate.x, translate.y]).toBeCloseToArray([50, 97.712]);
+            expect([scale.x, scale.y]).toBeCloseToArray([1, 1.221]);
         });
     });
 

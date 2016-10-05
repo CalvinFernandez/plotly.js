@@ -41,6 +41,12 @@ module.exports = {
     // mousewheel or two-finger scroll zooms the plot
     scrollZoom: false,
 
+    // mousewheel or two-finger scroll zooms the plot x-axis only
+    scrollZoomX: false,
+
+    // mousewheel or two-finger scroll zooms the plot y-axis only
+    scrollZoomY: false,
+
     // double click interaction (false, 'reset', 'autosize' or 'reset+autosize')
     doubleClick: 'reset+autosize',
 
